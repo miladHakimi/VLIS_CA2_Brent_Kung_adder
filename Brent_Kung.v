@@ -114,4 +114,79 @@ module brent_kung (
 	buf(fifth_layer_gray_cell_out, sixth_layer_buffer_out[0]);
 	buf(forth_layer_gray_cell_out, sixth_layer_buffer_out[1]);
 
+	// layer 7
+	wire [15:0] seventh_layer_g;
+	assign seventh_layer_g[0] = first_layer_buffer_g[0];
+	assign seventh_layer_g[1] = second_layer_buffer_g[0];
+	
+	gray_cell gc_l7_0(
+		first_layer_buffer_g[1],
+		first_layer_buffer_g[1],
+		second_layer_buffer_g[0],
+
+		seventh_layer_g[2]
+	);
+
+	assign seventh_layer_g[3] = third_layer_buffer_g[0];
+
+	gray_cell gc_l7_1(
+		first_layer_buffer_g[2],
+		first_layer_buffer_g[2],
+		third_layer_buffer_g[0],
+
+		seventh_layer_g[4]
+	);
+
+	buf(sixth_layer_gray_cell_out[0], seventh_layer_g[5]);
+
+	gray_cell gc_l7_2(
+		first_layer_buffer_g[3],
+		first_layer_buffer_g[3],
+		third_layer_buffer_g[0],
+
+		seventh_layer_g[6]
+	);
+
+	assign seventh_layer_g[7] = first_layer_buffer_g;
+
+	gray_cell gc_l7_3(
+		first_layer_buffer_g[4],
+		first_layer_buffer_g[4],
+		first_layer_buffer_g,
+
+		seventh_layer_g[8]
+	);
+
+	buf(sixth_layer_gray_cell_out[1], seventh_layer_g[9]);
+
+	gray_cell gc_l7_4(
+		first_layer_buffer_g[5],
+		first_layer_buffer_g[5],
+		sixth_layer_gray_cell_out[1],
+
+		seventh_layer_g[10]
+	);
+
+	buf(sixth_layer_buffer_out[0], seventh_layer_g[11]);
+
+	gray_cell gc_l7_5(
+		first_layer_buffer_g[6],
+		first_layer_buffer_g[6],
+		sixth_layer_buffer_out[0],
+
+		seventh_layer_g[12]
+	);
+
+	buf(sixth_layer_gray_cell_out[1], seventh_layer_g[13]);
+
+	gray_cell gc_l7_6(
+		first_layer_buffer_g[7],
+		first_layer_buffer_g[7],
+		sixth_layer_gray_cell_out[1],
+
+		seventh_layer_g[14]
+	);
+
+	assign seventh_layer_g[15] = sixth_layer_buffer_out[1];
+
 endmodule
