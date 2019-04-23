@@ -1,6 +1,7 @@
 module Brent_Kung (
 	input[15:0] data1, data2,
-	output [15:0] res	
+	input cin,
+	output [16:0] res	
 );
 	wire [15:0] init_p, init_g;
 	wire [7:0]  first_layer_buffer_p, first_layer_buffer_g;
@@ -15,7 +16,7 @@ module Brent_Kung (
 
 	gray_cell gc_l1(init_g[1], init_p[1], init_g[0], first_layer_gray_cell_out);
 
-	assign {first_layer_buffer_g[0], first_layer_buffer_p[0]} = {init_g[0], 1'b0};
+	assign {first_layer_buffer_g[0], first_layer_buffer_p[0]} = {init_g[0]^cin, 1'b0};
 	
 	genvar index;  
 	generate  
@@ -87,10 +88,11 @@ module Brent_Kung (
 	gray_cell gc_l5(third_layer_buffer_g[1], third_layer_buffer_p[1], forth_layer_buffer_out, fifth_layer_gray_cell_out);
 
 // 	// layer 6
-	wire [2:0] sixth_layer_gray_cell_out, sixth_layer_buffer_out;
+	wire [2:0] sixth_layer_gray_cell_out;
+	wire [1:0] sixth_layer_buffer_out;
 	gray_cell gc_l6_0(
 		second_layer_buffer_g[1],
-		second_layer_buffer_g[1],
+		second_layer_buffer_p[1],
 		third_layer_buffer_g[0],
 
 		sixth_layer_gray_cell_out[0]
@@ -142,7 +144,7 @@ module Brent_Kung (
 	gray_cell gc_l7_2(
 		first_layer_buffer_g[3],
 		first_layer_buffer_p[3],
-		third_layer_buffer_g[0],
+		sixth_layer_gray_cell_out[0],
 
 		seventh_layer_g[6]
 	);
@@ -177,18 +179,17 @@ module Brent_Kung (
 		seventh_layer_g[12]
 	);
 
-	buf(seventh_layer_g[13], sixth_layer_gray_cell_out[1]);
+	buf(seventh_layer_g[13], sixth_layer_gray_cell_out[2]);
 
 	gray_cell gc_l7_6(
 		first_layer_buffer_g[7],
 		first_layer_buffer_p[7],
-		sixth_layer_gray_cell_out[1],
+		sixth_layer_gray_cell_out[2],
 
 		seventh_layer_g[14]
 	);
 
 	assign seventh_layer_g[15] = sixth_layer_buffer_out[1];
-
 	// res
 	assign res = {1'b0, init_p} ^ {seventh_layer_g, 1'b0};
 endmodule
